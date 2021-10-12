@@ -1,10 +1,6 @@
 import styled from "styled-components";
 
-export const DeleteTaskButton = styled.button`
-  position: absolute;
-  top: 20px;
-  right: 16px;
-
+const ActionTaskButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -20,6 +16,45 @@ export const DeleteTaskButton = styled.button`
   padding: 0;
   background: transparent;
   cursor: pointer;
+`;
+
+export const DeleteTaskButton = styled(ActionTaskButton)`
+  position: absolute;
+  top: 20px;
+  right: 16px;
+`;
+
+export const EditTaskButton = styled(ActionTaskButton)`
+  position: absolute;
+  top: 20px;
+  right: 52px;
+`;
+
+export const EditDoneButton = styled(ActionTaskButton)`
+  position: absolute;
+  top: 20px;
+  right: 52px;
+  opacity: 1;
+`;
+
+const EditInputBase = styled.input`
+  width: 300px;
+  height: 100%;
+
+  outline: none;
+  border: none;
+  padding: 0;
+  background: transparent;
+
+  font-size: 18px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #ffffff;
+`;
+
+export const EditInput = styled(EditInputBase)`
+  opacity: ${({ isEditMode }) => (isEditMode ? "1" : "0")};
+  z-index: ${({ isEditMode }) => (isEditMode ? "1" : "-1")};
 `;
 
 export const TaskItemContainer = styled.div`
@@ -41,13 +76,15 @@ export const TaskItemContainer = styled.div`
   &:hover {
     background: #26272c;
   }
-  &:hover ${DeleteTaskButton} {
+  &:hover ${ActionTaskButton} {
     opacity: 1;
   }
 `;
 
 const TaskTextBase = styled.span`
   display: block;
+
+  white-space: nowrap;
 
   text-decoration: line-through;
 
@@ -64,8 +101,8 @@ export const TaskText = styled(TaskTextBase)`
 const TaskCheckboxBase = styled.button`
   position: relative;
 
-  width: 20px;
-  height: 20px;
+  min-width: 20px;
+  min-height: 20px;
 
   margin-left: 16px;
   margin-right: 12px;

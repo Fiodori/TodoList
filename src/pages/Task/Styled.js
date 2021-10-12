@@ -11,7 +11,7 @@ export const TaskContainer = styled.div`
   height: 85vh;
   margin: 55px auto;
 
-  padding-bottom: 80px;
+  padding-bottom: 120px;
 
   background: #121213;
   border-radius: 20px;
@@ -33,7 +33,7 @@ export const TaskBlock = styled.div`
 
 export const TaskListContainer = styled.div`
   width: 100%;
-  height: 600px;
+  height: 85%;
 
   > div {
     margin: 2px auto;
