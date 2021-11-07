@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
-import { deleteTask, changeCheckStatus } from "store/api/taskSlice";
+import { deleteTask, updateTask } from "store/api/taskSlice";
 
 import {
   TaskCheckbox,
@@ -25,7 +25,7 @@ const TaskItem = ({ taskItem, taskId }) => {
   const [isEditMode, setEditMode] = useState(false);
 
   const onCheck = () => {
-    dispatch(changeCheckStatus(taskId));
+    dispatch(updateTask(taskId));
   };
 
   const onDelete = () => {
@@ -48,15 +48,13 @@ const TaskItem = ({ taskItem, taskId }) => {
     <TaskItemContainer>
       <TaskCheckbox isChecked={taskItem.isChecked} onClick={onCheck} />
 
-      {isEditMode ? null : (
-        <TaskText isChecked={taskItem.isChecked}>{taskContent}</TaskText>
-      )}
+      {isEditMode ? null : <TaskText isChecked={taskItem.isChecked}>{taskContent}</TaskText>}
 
       <EditInput
         isEditMode={isEditMode}
         value={taskContent}
         ref={inputRef}
-        onChange={(event) => setTaskContent(event.target.value)}
+        onChange={event => setTaskContent(event.target.value)}
       />
 
       {isEditMode ? (

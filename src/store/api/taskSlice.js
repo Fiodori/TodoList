@@ -1,60 +1,46 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 
-import { payload } from "store/Mock";
+export const fetchTaskList = createAsyncThunk("tasks/fetchTaskList", async () => {
+  try {
+    const res = await axios.get("http://localhost:5050/api/tasks/");
 
-export const fetchTaskList = createAsyncThunk(
-  "tasks/fetchTaskList",
-  async () => {
-    try {
-      const res = await axios.get(
-        "https://jsonplaceholder.typicode.com/todos/?_start=0&_limit=5"
-      );
+    const payload = res.data;
 
-      return payload;
-    } catch (err) {
-      console.log(err.message);
-    }
+    return payload;
+  } catch (err) {
+    console.log(err.message);
   }
-);
+});
 
-export const addTask = createAsyncThunk(
-  "tasks/addTask",
-  async (taskContent) => {
-    try {
-      const res = await axios.get(
-        "https://jsonplaceholder.typicode.com/todos/?_start=0&_limit=5"
-      );
+export const addTask = createAsyncThunk("tasks/addTask", async taskContent => {
+  try {
+    const res = await axios.post("http://localhost:5050/api/tasks/", { content: taskContent });
 
-      return { taskContent };
-    } catch (err) {
-      console.log(err.message);
-    }
+    return { taskContent };
+  } catch (err) {
+    console.log(err.message);
   }
-);
+});
 
-export const deleteTask = createAsyncThunk(
-  "tasks/deleteTask",
-  async (taskId) => {
-    try {
-      const res = await axios.get(
-        "https://jsonplaceholder.typicode.com/todos/?_start=0&_limit=5"
-      );
+export const deleteTask = createAsyncThunk("tasks/deleteTask", async taskId => {
+  try {
+    const res = await axios.delete(`http://localhost:5050/api/tasks/${taskId}`);
 
-      return { taskId };
-    } catch (err) {
-      console.log(err.message);
-    }
+    return { taskId };
+  } catch (err) {
+    console.log(err.message);
   }
-);
+});
 
-export const changeCheckStatus = createAsyncThunk(
-  "tasks/changeCheckStatus",
-  async (taskId) => {
+export const updateTask = createAsyncThunk(
+  "tasks/updateTask",
+  async (taskId, taskContent, isChecked) => {
     try {
-      const res = await axios.get(
-        "https://jsonplaceholder.typicode.com/todos/?_start=0&_limit=5"
-      );
+      const res = await axios.put(`http://localhost:5050/api/tasks/${taskId}`, {
+        content: taskContent,
+        isChecked,
+      });
 
       return { taskId };
     } catch (err) {
@@ -77,14 +63,11 @@ const taskSlice = createSlice({
     },
 
     [addTask.fulfilled]: (state, { payload }) => {
-      state.taskList = [
-        ...state.taskList,
-        { content: payload.taskContent, isChecked: false },
-      ];
+      state.taskList = [...state.taskList, { content: payload.taskContent, isChecked: false }];
       state.loading = false;
     },
 
-    [changeCheckStatus.fulfilled]: (state, { payload }) => {
+    [updateTask.fulfilled]: (state, { payload }) => {
       state.taskList = state.taskList.map((taskItem, taskIndex) => {
         if (taskIndex === payload.taskId) {
           return { ...taskItem, isChecked: !taskItem.isChecked };
@@ -100,25 +83,25 @@ const taskSlice = createSlice({
       state.loading = false;
     },
 
-    [fetchTaskList.pending]: (state) => {
+    [fetchTaskList.pending]: state => {
       state.loading = true;
     },
 
-    [addTask.pending]: (state) => {
+    [addTask.pending]: state => {
       state.loading = true;
     },
 
-    [changeCheckStatus.pending]: (state) => {
+    [updateTask.pending]: state => {
       state.loading = true;
     },
 
-    [deleteTask.pending]: (state) => {
+    [deleteTask.pending]: state => {
       state.loading = true;
     },
   },
 });
 
-export const selectTaskLoading = (state) => state.tasks.loading;
-export const selectTaskList = (state) => state.tasks.taskList;
+export const selectTaskLoading = state => state.tasks.loading;
+export const selectTaskList = state => state.tasks.taskList;
 
 export default taskSlice.reducer;

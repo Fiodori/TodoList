@@ -1,12 +1,7 @@
 import React, { useEffect, useState } from "react";
 import TaskItem from "components/TaskItem";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  selectTaskList,
-  selectTaskLoading,
-  fetchTaskList,
-  addTask,
-} from "store/api/taskSlice";
+import { selectTaskList, selectTaskLoading, fetchTaskList, addTask } from "store/api/taskSlice";
 
 import {
   AddTaskContainer,
@@ -45,7 +40,7 @@ const Task = () => {
 
         <TaskListContainer>
           {taskList.map((taskItem, taskIndex) => (
-            <TaskItem key={taskIndex} taskItem={taskItem} taskId={taskIndex} />
+            <TaskItem key={taskIndex} taskItem={taskItem} taskId={taskItem.id} />
           ))}
         </TaskListContainer>
 
@@ -53,7 +48,7 @@ const Task = () => {
           <AddTaskInput
             placeholder={"Добавить задачу"}
             value={taskText}
-            onChange={(event) => setTaskText(event.target.value)}
+            onChange={event => setTaskText(event.target.value)}
           />
 
           <AddTaskButton haveTaskText={taskText} onClick={OnAddTask}>
